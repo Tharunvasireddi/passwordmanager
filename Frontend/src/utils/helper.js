@@ -1,8 +1,8 @@
 import axiosInstance from "../api/axiosInstance";
 
-const registerUser = async({name,email,password})=>{
+const registerUser = async({username,email,password})=>{
     try{
-        const {data} = axiosInstance.post("/PasswordManager/register",{name,email,password});
+        const {data} = await axiosInstance.post("/PasswordManager/register",{username,email,password});
         return data;
     }catch(error){
         console.log(error);

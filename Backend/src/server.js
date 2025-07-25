@@ -3,8 +3,17 @@ import dotenv from "dotenv";
 import { connectDb } from "./config/database.js";
 import { router } from "./routes/auth-router.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 dotenv.config();
 const app = express();
+
+
+//cors
+app.use(cors({
+  origin : "http://localhost:5173",
+  credentials : true  
+}));
+
 
 // middlewares
 app.use(express.json());
