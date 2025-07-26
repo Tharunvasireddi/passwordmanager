@@ -22,7 +22,8 @@ const LoginForm = () => {
     const loginMutation = useMutation({
         mutationFn: loginUser,
         onSuccess: (data) => {
-            console.log("Login successful:", data)
+            console.log("Login successful:", data.token)
+            localStorage.setItem("token", data.token)
             // Check if login was successful
             if(data && (data.success === true || data.status === true || data.message === "Login successful")){
                 navigate({ to: "/dashboard" })

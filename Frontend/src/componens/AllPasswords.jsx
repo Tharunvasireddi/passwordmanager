@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getAllPasswords } from '../utils/helper'
+import argon2 from 'argon2'
 import { 
     EyeIcon, 
     EyeSlashIcon, 
@@ -21,8 +22,8 @@ const AllPasswords = () => {
         queryFn: getAllPasswords,
         retry: 2
     })
-
-    const passwords = passwordsData?.passwords || []
+    console.log("passwordsData", passwordsData.paswords)
+    const passwords = passwordsData?.paswords || []
 
     const filteredPasswords = passwords.filter(password =>
         password.appname.toLowerCase().includes(searchTerm.toLowerCase())
@@ -156,7 +157,7 @@ const AllPasswords = () => {
                                         <div className="relative">
                                             <input
                                                 type={isVisible ? 'text' : 'password'}
-                                                value={password.password}
+                                                value={argon2.d(password.password)}
                                                 readOnly
                                                 className="w-full pr-20 py-2 px-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 font-mono text-sm"
                                             />
