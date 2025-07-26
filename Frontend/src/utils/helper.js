@@ -29,4 +29,15 @@ const createPassword = async({appname,password})=>{
         throw error.response?.data || error;
     }
 }
-export {registerUser,loginUser,createPassword}
+
+const getAllPasswords = async()=>{
+    try{
+        const {data} = await axiosInstance.get("/passwordManager/getallpasswords");
+        return data;
+    }catch(error){
+        console.error("Get all passwords error:", error);
+        throw error.response?.data || error;
+    }
+}
+
+export {registerUser,loginUser,createPassword,getAllPasswords}
