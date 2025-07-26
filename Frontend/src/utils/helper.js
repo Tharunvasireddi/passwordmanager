@@ -32,10 +32,14 @@ const createPassword = async({appname,password})=>{
 
 const getAllPasswords = async()=>{
     try{
-        const {data} = await axiosInstance.get("/passwordManager/getallpasswords");
+        console.log("fetching the passwords")
+        const {data} = await axiosInstance.get("/passwordManager/fetch");
+        console.log("Passwords fetched successfully:", data);
         return data;
     }catch(error){
         console.error("Get all passwords error:", error);
+        console.error("Error response:", error.response?.data);
+        console.error("Error status:", error.response?.status);
         throw error.response?.data || error;
     }
 }

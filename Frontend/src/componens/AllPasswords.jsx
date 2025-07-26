@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getAllPasswords } from '../utils/helper'
 import { 
@@ -16,7 +16,6 @@ const AllPasswords = () => {
     const [visiblePasswords, setVisiblePasswords] = useState(new Set())
     const [copiedId, setCopiedId] = useState(null)
 
-    // Fetch all passwords
     const { data: passwordsData, isLoading, error, refetch } = useQuery({
         queryKey: ['passwords'],
         queryFn: getAllPasswords,
@@ -25,12 +24,9 @@ const AllPasswords = () => {
 
     const passwords = passwordsData?.passwords || []
 
-    // Filter passwords based on search term
     const filteredPasswords = passwords.filter(password =>
         password.appname.toLowerCase().includes(searchTerm.toLowerCase())
     )
-
-    // Toggle password visibility
     const togglePasswordVisibility = (passwordId) => {
         setVisiblePasswords(prev => {
             const newSet = new Set(prev)
@@ -43,7 +39,6 @@ const AllPasswords = () => {
         })
     }
 
-    // Copy password to clipboard
     const copyToClipboard = async (password, passwordId) => {
         try {
             await navigator.clipboard.writeText(password)
@@ -85,7 +80,6 @@ const AllPasswords = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-            {/* Header */}
             <div className="bg-white shadow-sm border-b">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                     <div className="flex items-center justify-between">
@@ -107,7 +101,6 @@ const AllPasswords = () => {
             </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Search Bar */}
                 <div className="mb-8">
                     <div className="relative max-w-md">
                         <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -121,14 +114,13 @@ const AllPasswords = () => {
                     </div>
                 </div>
 
-                {/* Passwords Grid */}
                 {filteredPasswords.length === 0 ? (
                     <div className="text-center py-12">
                         <KeyIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />
                         <h3 className="text-xl font-semibold text-gray-900 mb-2">
                             {searchTerm ? 'No passwords found' : 'No passwords saved yet'}
                         </h3>
-                        <p className="text-gray-600">
+                        <p className="text-gray-600">   
                             {searchTerm 
                                 ? 'Try adjusting your search terms' 
                                 : 'Start by adding your first password to the vault'
@@ -146,7 +138,6 @@ const AllPasswords = () => {
                                     key={password._id}
                                     className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
                                 >
-                                    {/* App Name */}
                                     <div className="flex items-center justify-between mb-4">
                                         <h3 className="text-lg font-semibold text-gray-900 truncate">
                                             {password.appname}
@@ -158,7 +149,6 @@ const AllPasswords = () => {
                                         </div>
                                     </div>
 
-                                    {/* Password Field */}
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
                                             Password
@@ -171,8 +161,7 @@ const AllPasswords = () => {
                                                 className="w-full pr-20 py-2 px-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 font-mono text-sm"
                                             />
                                             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-1">
-                                                {/* Toggle Visibility */}
-                                                <button
+                                                    <button
                                                     onClick={() => togglePasswordVisibility(password._id)}
                                                     className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
                                                     title={isVisible ? 'Hide password' : 'Show password'}
@@ -203,8 +192,7 @@ const AllPasswords = () => {
                                         )}
                                     </div>
 
-                                    {/* Metadata */}
-                                    <div className="text-xs text-gray-500">
+                                        <div className="text-xs text-gray-500">
                                         <p>Added: {new Date(password.createdAt).toLocaleDateString()}</p>
                                     </div>
                                 </div>

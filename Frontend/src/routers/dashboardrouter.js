@@ -6,6 +6,14 @@ const dashboardRouter = createRoute({
   getParentRoute: () => rootRouter,
   path: "/dashboard",
   component: DashBoardPage,
+  beforeLoad : () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return {
+        redirectTo: "/login",
+      };
+    }
+  }
 });
 
 export { dashboardRouter };
