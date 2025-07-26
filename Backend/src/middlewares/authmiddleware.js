@@ -1,4 +1,4 @@
-import jwt, { decode } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 const authMiddleware = async (req, res, next) => {
@@ -17,6 +17,7 @@ const authMiddleware = async (req, res, next) => {
         message: "user  if not found please login",
       });
     }
+    console.log("this is user middleware",decoded.isUserExisted)
     req.user = decoded.isUserExisted;
     next();
   } catch (error) {

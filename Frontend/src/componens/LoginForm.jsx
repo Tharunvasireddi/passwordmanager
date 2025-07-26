@@ -23,11 +23,19 @@ const LoginForm = () => {
         mutationFn: loginUser,
         onSuccess: (data) => {
             console.log("Login successful:", data)
-            navigate({ to: "/dashboard" })
+            // Check if login was successful
+            if(data && (data.success === true || data.status === true || data.message === "Login successful")){
+                navigate({ to: "/dashboard" })
+            }
+            else{
+                alert(data?.message || "Login failed")
+            }
         },
         onError: (error) => {
             console.error("Login failed:", error)
-
+            // Handle different error formats
+            const errorMessage = error?.message || error?.error || "Login failed. Please try again."
+            alert(errorMessage)
         }
     })
 

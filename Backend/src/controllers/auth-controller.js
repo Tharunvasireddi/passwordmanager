@@ -46,12 +46,13 @@ const registerController = async (req, res) => {
 
 const loginController = async (req, res) => {
   try {
+    console.log("hi this is login controller")
     const { username, password } = req.body;
     const isUserExisted = await User.findOne({ username: username });
     if (!isUserExisted) {
-      return res.status.json({
-        status: true,
-        message: "user not regisered yet ,please register and ry again",
+      return res.status(400).json({
+        status: false,
+        message: "User not registered yet, please register and try again",
       });
     }
     const isPasswordMatch = await argon2.verify(
@@ -75,7 +76,7 @@ const loginController = async (req, res) => {
     res.cookie("token", token, cookieOptions);
     res.status(200).json({
       status: true,
-      messagec: "logined succesfully",
+      message: "Logged in successfully",
       user: isUserExisted,
       token,
     });
