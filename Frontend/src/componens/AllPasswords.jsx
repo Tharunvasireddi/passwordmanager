@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { getAllPasswords } from '../utils/helper'
-import { 
-    EyeIcon, 
-    EyeSlashIcon, 
+import { getAllPasswords, deletePassword } from '../utils/helper'
+import {
+    EyeIcon,
+    EyeSlashIcon,
     MagnifyingGlassIcon,
     KeyIcon,
     ClipboardDocumentIcon,
     ShieldCheckIcon,
-    ExclamationTriangleIcon
+    ExclamationTriangleIcon,
+    TrashIcon
 } from '@heroicons/react/24/outline'
 
 const AllPasswords = () => {
@@ -21,12 +22,13 @@ const AllPasswords = () => {
         queryFn: getAllPasswords,
         retry: 2
     })
-    console.log("passwordsData", passwordsData)
+
     const passwords = passwordsData?.passwords || []
 
     const filteredPasswords = passwords.filter(password =>
         password.appname.toLowerCase().includes(searchTerm.toLowerCase())
     )
+
     const togglePasswordVisibility = (passwordId) => {
         setVisiblePasswords(prev => {
             const newSet = new Set(prev)
@@ -46,6 +48,18 @@ const AllPasswords = () => {
             setTimeout(() => setCopiedId(null), 2000)
         } catch (err) {
             console.error('Failed to copy password:', err)
+        }
+    }
+
+    const handleDeletePassword = async (passwordId) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this password?")
+        if (!confirmDelete) return
+
+        try {
+            await deletePassword(passwordId)
+            refetch()
+        } catch (error) {
+            console.error("Error deleting password:", error)
         }
     }
 
@@ -120,9 +134,9 @@ const AllPasswords = () => {
                         <h3 className="text-xl font-semibold text-gray-900 mb-2">
                             {searchTerm ? 'No passwords found' : 'No passwords saved yet'}
                         </h3>
-                        <p className="text-gray-600">   
-                            {searchTerm 
-                                ? 'Try adjusting your search terms' 
+                        <p className="text-gray-600">
+                            {searchTerm
+                                ? 'Try adjusting your search terms'
                                 : 'Start by adding your first password to the vault'
                             }
                         </p>
@@ -132,7 +146,7 @@ const AllPasswords = () => {
                         {filteredPasswords.map((password) => {
                             const isVisible = visiblePasswords.has(password._id)
                             const isCopied = copiedId === password._id
-                            
+
                             return (
                                 <div
                                     key={password._id}
@@ -161,7 +175,7 @@ const AllPasswords = () => {
                                                 className="w-full pr-20 py-2 px-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 font-mono text-sm"
                                             />
                                             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-1">
-                                                    <button
+                                                <button
                                                     onClick={() => togglePasswordVisibility(password._id)}
                                                     className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
                                                     title={isVisible ? 'Hide password' : 'Show password'}
@@ -172,13 +186,12 @@ const AllPasswords = () => {
                                                         <EyeIcon className="h-4 w-4" />
                                                     )}
                                                 </button>
-                                                
-                                                {/* Copy to Clipboard */}
+
                                                 <button
                                                     onClick={() => copyToClipboard(password.password, password._id)}
                                                     className={`p-1 transition-colors ${
-                                                        isCopied 
-                                                            ? 'text-green-600' 
+                                                        isCopied
+                                                            ? 'text-green-600'
                                                             : 'text-gray-500 hover:text-gray-700'
                                                     }`}
                                                     title="Copy password"
@@ -192,8 +205,16 @@ const AllPasswords = () => {
                                         )}
                                     </div>
 
-                                        <div className="text-xs text-gray-500">
+                                    <div className="flex items-center justify-between text-xs text-gray-500 mt-2">
                                         <p>Added: {new Date(password.createdAt).toLocaleDateString()}</p>
+                                        <button
+                                            onClick={() => handleDeletePassword(password._id)}
+                                            className="flex items-center space-x-1 text-red-500 hover:text-red-700 transition-colors text-sm"
+                                            title="Delete password"
+                                        >
+                                            <TrashIcon className="h-4 w-4" />
+                                            <span>Delete</span>
+                                        </button>
                                     </div>
                                 </div>
                             )

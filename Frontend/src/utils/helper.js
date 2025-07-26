@@ -43,5 +43,13 @@ const getAllPasswords = async()=>{
         throw error.response?.data || error;
     }
 }
-
-export {registerUser,loginUser,createPassword,getAllPasswords}
+const deletePassword = async(id)=>{
+    try{
+        const {data} = await axiosInstance.delete(`/passwordManager/delete/${id}`);
+        return data;
+    }catch(error){
+        console.error("Delete password error:", error);
+        throw error.response?.data || error;
+    }
+}   
+export {registerUser,loginUser,createPassword,getAllPasswords,deletePassword}   

@@ -72,4 +72,34 @@ const fetchPasswordsController = async (req, res) => {
   }
 };
 
-export { addPasswordController, fetchPasswordsController };
+const deletePasswordController = async(req,res)=>{
+    try{
+        const id = req.params.id;
+        if(!id){
+            return res.status(400).json({
+                status:false,
+                message:"password id is not found"
+            })
+        }
+        const password = await Password.findByIdAndDelete(id);
+        if(!password){
+            return res.status(400).json({
+                status:false,
+                message:"password is not found"
+            })
+        }
+        res.status(200).json({
+            status:true,
+            message:"password is deleted successfully",
+            password:password
+        })
+    }catch(error){
+        console.log("error while deleting the password",error)
+        return res.status(400).json({
+            status:false,
+            message:"error while deleting the password"
+        })
+    }
+}
+export { addPasswordController, fetchPasswordsController,deletePasswordController };
+    
