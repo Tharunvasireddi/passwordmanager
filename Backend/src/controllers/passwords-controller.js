@@ -1,5 +1,4 @@
 import { Password } from "../models/password-model.js";
-import argon2 from "argon2";
 const addPasswordController = async (req, res) => {
   try {
     const { appname, password } = req.body;
@@ -16,10 +15,9 @@ const addPasswordController = async (req, res) => {
         message: "user not found",
       });
     }
-    const hashedPassword = await argon2.hash(password);
     const newPassword = await Password.create({
       appname: appname,
-      password: hashedPassword,
+      password: password,
       user: req.user._id,
     });
     if (!newPassword) {
@@ -63,7 +61,7 @@ const fetchPasswordsController = async (req, res) => {
     res.status(200).json({
       status: true,
       message: "passwords are fetched successfull",
-      paswords: passwords,
+      passwords: passwords,
     });
   } catch (error) {
     console.log("error whule fetching the passwords ", error);
