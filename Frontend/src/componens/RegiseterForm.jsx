@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router"
 import { registerUser } from "../utils/helper"
 import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
+
 const RegisterForm = () => {
     const navigate = useNavigate()
     const [formData, setFormData] = useState({
@@ -14,6 +15,19 @@ const RegisterForm = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
+    // Move useMutation to component level
+    const registerMutation = useMutation({
+        mutationFn: registerUser,
+        onSuccess: (data) => {
+            console.log("Registration successful:", data)
+            navigate({ to: "/login" })
+        },
+        onError: (error) => {
+            console.error("Registration failed:", error)
+            // You can add error handling here (show toast, set error state, etc.)
+        }
+    })
+
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -21,25 +35,21 @@ const RegisterForm = () => {
         })
     }
 
-        const handleRegister = async() => {
-            const mutation = useMutation({
-                mutationFn : registerUser,
-                onSuccess : (data) => {
-                    console.log(data)
-                    navigate({to : "/login"})
-                },
-                onError : (error) => {
-                    console.log(error)
-                }
-            })
-            mutation.mutate({username: formData.username, email: formData.email, password: formData.password})  
-        }
-
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        // Handle registration logic here
-      handleRegister()
-
+        
+        // Basic validation
+        if (formData.password !== formData.confirmPassword) {
+            alert("Passwords don't match!")
+            return
+        }
+        
+        // Trigger the mutation
+        registerMutation.mutate({
+            username: formData.username,
+            email: formData.email,
+            password: formData.password
+        })
     }
 
     return (

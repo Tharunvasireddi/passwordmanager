@@ -9,5 +9,21 @@ const registerUser = async({username,email,password})=>{
     }
 }
 
+const loginUser = async({username,password})=>{
+    try{
+        const {data} = await axiosInstance.post("/PasswordManager/login",{username,password});
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+}
 
-export {registerUser}
+const createPassword = async({appname,password})=>{
+    try{
+        const {data} = await axiosInstance.post("/PasswordManager/addpassword",{appname,password});
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+}
+export {registerUser,loginUser,createPassword}

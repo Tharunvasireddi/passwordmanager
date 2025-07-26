@@ -4,6 +4,7 @@ import { homeRouter } from "./homeroute";
 import { registerRouter } from "./registerRoute";
 import { loginRouter } from "./loginroute";
 import { dashboardRouter } from "./dashboardrouter";
+import { addpasswordroute } from "./addpasswordroute";
 
 export const rootRouter = createRootRoute({
   component: App,
@@ -14,4 +15,5 @@ export const routeTree = rootRouter.addChildren([
   registerRouter,
   loginRouter,
   dashboardRouter,
+  addpasswordroute
 ]);
