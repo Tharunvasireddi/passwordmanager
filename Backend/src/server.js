@@ -10,7 +10,7 @@ const app = express();
 
 //cors
 app.use(cors({
-  origin : "http://localhost:5173",
+  origin : process.env.NODE_ENV === "production" ? "passwordmanager-indol.vercel.app" : "http://localhost:5173",
   credentials : true  
 }));
 
