@@ -13,4 +13,6 @@ router.post("/login", loginController);
 router.post("/addpassword", authMiddleware, addPasswordController);
 router.get("/fetch", authMiddleware, fetchPasswordsController);
 router.delete("/delete/:id", authMiddleware, deletePasswordController);
+
+
 export { router };
