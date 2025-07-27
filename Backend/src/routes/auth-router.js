@@ -3,9 +3,8 @@ import {
   loginController,
   registerController,
 } from "../controllers/auth-controller.js";
-import { addPasswordController } from "../controllers/passwords-Controller.js";
+import { addPasswordController, fetchPasswordsController, deletePasswordController } from "../controllers/passwords-controller.js";
 import { authMiddleware } from "../middlewares/authmiddleware.js";
-import { fetchPasswordsController,deletePasswordController  } from "../controllers/passwords-controller.js";
 
 const router = Router();
 
