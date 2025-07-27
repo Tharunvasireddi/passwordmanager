@@ -1,12 +1,45 @@
 import { Link } from "@tanstack/react-router"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { isAuthenticated, getUserFromToken, logout } from "../utils/auth"
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [user, setUser] = useState(null)
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen)
     }
+
+    const handleLogout = () => {
+        logout()
+        setIsLoggedIn(false)
+        setUser(null)
+        setIsMenuOpen(false)
+    }
+
+    // Check authentication status on component mount and when localStorage changes
+    useEffect(() => {
+        const checkAuth = () => {
+            const authStatus = isAuthenticated()
+            setIsLoggedIn(authStatus)
+            if (authStatus) {
+                setUser(getUserFromToken())
+            } else {
+                setUser(null)
+            }
+        }
+
+        checkAuth()
+
+        // Listen for storage changes (when user logs in/out in another tab)
+        const handleStorageChange = () => {
+            checkAuth()
+        }
+
+        window.addEventListener('storage', handleStorageChange)
+        return () => window.removeEventListener('storage', handleStorageChange)
+    }, [])
 
     return (
         <nav className="bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg sticky top-0 z-50">
@@ -28,13 +61,28 @@ const Navbar = () => {
                         >
                             Home
                         </Link>
-                        <Link 
-                            to="/dashboard" 
-                            className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
-                        >
-                            Dashboard
-                        </Link>
-
+                        {isLoggedIn && (
+                            <>
+                                <Link 
+                                    to="/dashboard" 
+                                    className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                                >
+                                    Dashboard
+                                </Link>
+                                <Link 
+                                    to="/passwords" 
+                                    className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                                >
+                                    My Passwords
+                                </Link>
+                                <Link 
+                                    to="/add-password" 
+                                    className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                                >
+                                    Add Password
+                                </Link>
+                            </>
+                        )}
                     </div>
 
                     {/* Auth Buttons - Desktop */}
