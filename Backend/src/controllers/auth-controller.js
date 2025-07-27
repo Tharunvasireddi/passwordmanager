@@ -66,7 +66,7 @@ const loginController = async (req, res) => {
           "password is incorrect ,please try again with correct password",
       });
     }
-    const token = jwt.sign({ isUserExisted }, process.env.JWT_KEY);
+    const token = jwt.sign({ isUserExisted }, process.env.JWT_KEY,{expiresIn : "1h"});
     if (!token) {
       return res.status(400).json({
         status: false,
