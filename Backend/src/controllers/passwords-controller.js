@@ -41,7 +41,6 @@ const addPasswordController = async (req, res) => {
 };
 
 const fetchPasswordsController = async (req, res) => {
-  console.log("fetching the passwords")
   try {
     const id = req.user._id;
     if (!id) {
@@ -57,7 +56,7 @@ const fetchPasswordsController = async (req, res) => {
         message: "passwords are not found",
       });
     }
-    console.log("passwords are fetched successfull", passwords);
+
     res.status(200).json({
       status: true,
       message: "passwords are fetched successfull",

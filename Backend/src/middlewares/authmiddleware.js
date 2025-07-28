@@ -26,7 +26,6 @@ const authMiddleware = async (req, res, next) => {
         message: "user  if not found please login",
       });
     }
-    console.log("this is user middleware",decoded.isUserExisted)
     req.user = decoded.isUserExisted;
     next();
   } catch (error) {

@@ -6,7 +6,6 @@ import { cookieOptions } from "../config/cookie-config.js";
 dotenv.config();
 const registerController = async (req, res) => {
   try {
-    console.log("hi hello")
     const { username, email, password } = req.body;
     const isUserExisted = await User.findOne({
       $or: [{ username: username }, { email: email }],
@@ -46,7 +45,6 @@ const registerController = async (req, res) => {
 
 const loginController = async (req, res) => {
   try {
-    console.log("hi this is login controller")
     const { username, password } = req.body;
     const isUserExisted = await User.findOne({ username: username });
     if (!isUserExisted) {
